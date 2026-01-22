@@ -1,4 +1,5 @@
 package com.leon.evention.ticket.domain;
 
-public class TicketStatus {
+public enum TicketStatus {
+    IN_PROGRESS, CLOSED
 }
