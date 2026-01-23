@@ -1,5 +1,5 @@
 package com.leon.evention.project.domain;
 
-public enum ProjectRole {
+enum ProjectRole {
     PROJECT_OWNER, MAINTAINER, CONTRIBUTOR
 }
