@@ -1,9 +1,21 @@
 package com.leon.evention.project.domain;
 
-public class ProjectMember {
-    ProjectRole role;
+import com.leon.evention.member.domain.Member;
 
-    public ProjectMember(ProjectRole projectRole) {
+class ProjectMember {
+    private final Member member;
+    private final ProjectRole role;
+
+    public ProjectMember(Member member, ProjectRole projectRole) {
+        this.member = member;
         this.role = projectRole;
+    }
+
+    boolean isSame(Member actor) {
+        return this.member.equals(actor);
+    }
+
+    boolean isMaintainer() {
+        return role == ProjectRole.MAINTAINER;
     }
 }
