@@ -6,11 +6,12 @@ import com.leon.evention.ticket.domain.exception.UnauthorizedTicketOperationExce
 
 public class Ticket {
 
-    private TicketStatus status;
     private final Project project;
+    private TicketStatus status;
 
     public Ticket(Project project) {
         this.project = project;
+        this.status = TicketStatus.OPEN;
     }
 
     public static Ticket open(Project project) {
@@ -22,5 +23,9 @@ public class Ticket {
             throw new UnauthorizedTicketOperationException();
         }
         this.status = newStatus;
+    }
+
+    public TicketStatus getStatus() {
+        return this.status;
     }
 }

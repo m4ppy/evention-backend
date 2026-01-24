@@ -1,5 +1,5 @@
 package com.leon.evention.ticket.domain;
 
 public enum TicketStatus {
-    IN_PROGRESS, CLOSED
+    OPEN, IN_PROGRESS, COMPLETED, CLOSED, NOT_PLANNED
 }
