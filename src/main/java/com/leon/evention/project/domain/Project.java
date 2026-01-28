@@ -13,11 +13,11 @@ public class Project {
         members.add(new ProjectMember(owner, ProjectRole.PROJECT_OWNER));
     }
 
-    public void addMaintainer(Member member) {
+    public void addMaintainer(Member actor, Member member) {
         members.add(new ProjectMember(member, ProjectRole.MAINTAINER));
     }
 
-    public void addContributor(Member member) {
+    public void addContributor(Member actor, Member member) {
         members.add(new ProjectMember(member, ProjectRole.CONTRIBUTOR));
     }
 
@@ -26,4 +26,17 @@ public class Project {
                 .anyMatch(projectMember ->
                         projectMember.isSame(actor) && projectMember.isMaintainer());
     }
+
+    public boolean isProjectMember(Member actor) {
+        return members.stream()
+                .anyMatch(projectMember -> projectMember.isSame(actor));
+    }
+
+    /*
+    public boolean isProjectOwner(Member actor) {
+        return members.stream()
+                .anyMatch(projectMember ->
+                        projectMember.isSame(actor) && projectMember.isProjectOwner());
+    }
+    */
 }

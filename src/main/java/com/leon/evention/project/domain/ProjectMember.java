@@ -18,4 +18,6 @@ class ProjectMember {
     boolean isMaintainer() {
         return role == ProjectRole.MAINTAINER;
     }
+
+    //boolean isProjectOwner() { return role == ProjectRole.PROJECT_OWNER; }
 }
