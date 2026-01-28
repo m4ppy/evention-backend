@@ -3,6 +3,7 @@ package com.leon.evention.ticket.domain;
 import com.leon.evention.comment.domain.Comment;
 import com.leon.evention.member.domain.Member;
 import com.leon.evention.project.domain.Project;
+import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
 import com.leon.evention.ticket.domain.exception.UnauthorizedTicketOperationException;
 import org.junit.jupiter.api.Test;
 
