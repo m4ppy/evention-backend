@@ -15,6 +15,10 @@ class ProjectMember {
         return this.member.equals(actor);
     }
 
+    Member getMember() {
+        return this.member;
+    }
+
     boolean isProjectOwner() { return role == ProjectRole.PROJECT_OWNER; }
 
     boolean isMaintainer() { return role == ProjectRole.MAINTAINER; }

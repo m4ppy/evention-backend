@@ -28,6 +28,14 @@ public class Project {
         members.add(new ProjectMember(member, ProjectRole.CONTRIBUTOR));
     }
 
+    public void removeMember(Member actor, Member member) {
+        if (!isProjectOwner(actor)) {
+            throw new UnauthorizedProjectOperationException();
+        }
+
+        members.removeIf(pm -> pm.getMember().equals(member));
+    }
+
     public boolean isProjectMember(Member actor) {
         return members.stream()
                 .anyMatch(projectMember -> projectMember.isSame(actor));
