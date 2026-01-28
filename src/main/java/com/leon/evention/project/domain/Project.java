@@ -2,6 +2,7 @@ package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
+import com.leon.evention.ticket.domain.exception.DuplicateProjectMemberException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,18 @@ public class Project {
         if (!isProjectOwner(actor)) {
             throw new UnauthorizedProjectOperationException();
         }
+        if (isProjectMember(member)) {
+            throw new DuplicateProjectMemberException();
+        }
         members.add(new ProjectMember(member, ProjectRole.MAINTAINER));
     }
 
     public void addContributor(Member actor, Member member) {
         if (!isProjectOwner(actor)) {
             throw new UnauthorizedProjectOperationException();
+        }
+        if (isProjectMember(member)) {
+            throw new DuplicateProjectMemberException();
         }
         members.add(new ProjectMember(member, ProjectRole.CONTRIBUTOR));
     }
