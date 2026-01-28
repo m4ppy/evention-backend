@@ -15,9 +15,9 @@ class ProjectMember {
         return this.member.equals(actor);
     }
 
-    boolean isMaintainer() {
-        return role == ProjectRole.MAINTAINER;
-    }
+    boolean isProjectOwner() { return role == ProjectRole.PROJECT_OWNER; }
 
-    //boolean isProjectOwner() { return role == ProjectRole.PROJECT_OWNER; }
+    boolean isMaintainer() { return role == ProjectRole.MAINTAINER; }
+
+    boolean isContributor() { return role == ProjectRole.CONTRIBUTOR; }
 }
