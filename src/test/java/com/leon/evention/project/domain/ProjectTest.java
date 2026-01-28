@@ -2,6 +2,7 @@ package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
+import com.leon.evention.ticket.domain.exception.DuplicateProjectMemberException;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -86,4 +87,25 @@ public class ProjectTest {
         assertTrue(project.isContributor(contributor));
     }
 
+
+    // member-cannot-be-added-twice-to-same-project
+    @Test
+    void member_cannot_be_added_twice_to_same_project() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member maintainer = new Member(UUID.randomUUID());
+        Member contributor = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        project.addMaintainer(owner, maintainer);
+        project.addContributor(owner, contributor);
+
+        // WHEN & THEN
+        assertThrows(DuplicateProjectMemberException.class,
+                () -> project.addMaintainer(owner, maintainer));
+
+        assertThrows(DuplicateProjectMemberException.class,
+                () -> project.addMaintainer(owner, contributor));
+    }
 }
