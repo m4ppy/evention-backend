@@ -1,8 +1,9 @@
 package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
+import com.leon.evention.project.domain.exception.ProjectMemberNotFoundException;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
-import com.leon.evention.ticket.domain.exception.DuplicateProjectMemberException;
+import com.leon.evention.project.domain.exception.DuplicateProjectMemberException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,10 @@ public class Project {
     public void removeMember(Member actor, Member member) {
         if (!isProjectOwner(actor)) {
             throw new UnauthorizedProjectOperationException();
+        }
+
+        if (!isProjectMember(member)) {
+            throw new ProjectMemberNotFoundException();
         }
 
         members.removeIf(pm -> pm.getMember().equals(member));
