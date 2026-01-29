@@ -1,8 +1,9 @@
 package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
+import com.leon.evention.project.domain.exception.ProjectMemberNotFoundException;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
-import com.leon.evention.ticket.domain.exception.DuplicateProjectMemberException;
+import com.leon.evention.project.domain.exception.DuplicateProjectMemberException;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -107,5 +108,20 @@ public class ProjectTest {
 
         assertThrows(DuplicateProjectMemberException.class,
                 () -> project.addMaintainer(owner, contributor));
+    }
+
+
+    // project-cannot-remove-non-project-member
+    @Test
+    void project_cannot_remove_non_project_member() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member anonymous = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        // WHEN & THEN
+        assertThrows(ProjectMemberNotFoundException.class,
+                () -> project.removeMember(owner, anonymous));
     }
 }

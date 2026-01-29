@@ -1,4 +1,4 @@
-package com.leon.evention.ticket.domain.exception;
+package com.leon.evention.project.domain.exception;
 
 public class DuplicateProjectMemberException extends RuntimeException {
     public DuplicateProjectMemberException(String message) {
