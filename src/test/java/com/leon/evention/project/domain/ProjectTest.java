@@ -1,6 +1,7 @@
 package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
+import com.leon.evention.project.domain.exception.ProjectCannotRemoveLastOwnerException;
 import com.leon.evention.project.domain.exception.ProjectMemberNotFoundException;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
 import com.leon.evention.project.domain.exception.DuplicateProjectMemberException;
@@ -74,16 +75,20 @@ public class ProjectTest {
         Member owner = new Member(UUID.randomUUID());
         Member maintainer = new Member(UUID.randomUUID());
         Member contributor = new Member(UUID.randomUUID());
+        Member owner2 = new Member(UUID.randomUUID());
 
         Project project = new Project(owner);
 
+        project.addProjectOwner(owner, owner2);
         project.addMaintainer(owner, maintainer);
         project.addContributor(owner, contributor);
 
         // WHEN
+        project.removeMember(owner, owner2);
         project.removeMember(owner, maintainer);
 
         // THEN
+        assertFalse(project.isProjectOwner(owner2));
         assertFalse(project.isMaintainer(maintainer));
         assertTrue(project.isContributor(contributor));
     }
@@ -124,4 +129,19 @@ public class ProjectTest {
         assertThrows(ProjectMemberNotFoundException.class,
                 () -> project.removeMember(owner, anonymous));
     }
+
+    // project-cannot-remove-final-project-owner
+    @Test
+    void project_cannot_remove_final_project_owner() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        // WHEN & THEN
+        assertThrows(ProjectCannotRemoveLastOwnerException.class,
+                () -> project.removeMember(owner, owner));
+
+    }
+
 }

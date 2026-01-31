@@ -1,6 +1,7 @@
 package com.leon.evention.project.domain;
 
 import com.leon.evention.member.domain.Member;
+import com.leon.evention.project.domain.exception.ProjectCannotRemoveLastOwnerException;
 import com.leon.evention.project.domain.exception.ProjectMemberNotFoundException;
 import com.leon.evention.project.domain.exception.UnauthorizedProjectOperationException;
 import com.leon.evention.project.domain.exception.DuplicateProjectMemberException;
@@ -14,6 +15,16 @@ public class Project {
 
     public Project(Member owner) {
         members.add(new ProjectMember(owner, ProjectRole.PROJECT_OWNER));
+    }
+
+    public void addProjectOwner(Member actor, Member member) {
+        if (!isProjectOwner(actor)) {
+            throw new UnauthorizedProjectOperationException();
+        }
+        if (isProjectMember(member)) {
+            throw new DuplicateProjectMemberException();
+        }
+        members.add(new ProjectMember(member, ProjectRole.PROJECT_OWNER));
     }
 
     public void addMaintainer(Member actor, Member member) {
@@ -45,7 +56,11 @@ public class Project {
             throw new ProjectMemberNotFoundException();
         }
 
-        members.removeIf(pm -> pm.getMember().equals(member));
+        if (isProjectOwner(member) && members.stream().filter(ProjectMember::isProjectOwner).count() == 1) {
+            throw new ProjectCannotRemoveLastOwnerException();
+        }
+
+            members.removeIf(pm -> pm.getMember().equals(member));
     }
 
     public boolean isProjectMember(Member actor) {
