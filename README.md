@@ -1,7 +1,13 @@
-Evention - Backend
+# Evention - Backend
 
-Issue Management Platform
+> It's issue management platform for small IT teams.  
 
-learning Domain-Driven-Development
+---
 
-Author : Leon Choi
+## What I learned
+
+- learning Domain-Driven-Development
+
+---
+
+## Author : Leon Choi
