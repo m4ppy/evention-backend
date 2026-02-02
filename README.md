@@ -6,7 +6,8 @@
 
 ## What I learned
 
-- learning Domain-Driven-Development
+- learning Domain-Driven-Development & Test-Driven-Development
+- 
 
 ---
 
