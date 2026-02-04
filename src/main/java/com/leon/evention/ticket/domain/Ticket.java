@@ -1,12 +1,14 @@
 package com.leon.evention.ticket.domain;
 
 import com.leon.evention.comment.domain.Comment;
+import com.leon.evention.ticket.domain.exception.CommentNotFoundException;
 import com.leon.evention.project.domain.Project;
 import com.leon.evention.member.domain.Member;
 import com.leon.evention.ticket.domain.exception.UnauthorizedTicketOperationException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Ticket {
 
@@ -34,15 +36,36 @@ public class Ticket {
         return this.status;
     }
 
-    public void createComment(Member actor, String context) {
+    public UUID createComment(Member actor, String context) {
         if (!project.isProjectMember(actor)) {
             throw new UnauthorizedTicketOperationException();
         }
         Comment newComment = Comment.createComment(actor, context);
         this.comments.add(newComment);
+        return newComment.getId();
     }
 
     public Integer commentCount() {
         return this.comments.size();
+    }
+
+    public void updateComment(Member actor, UUID commentId, String context) {
+        Comment comment = getCommentById(commentId);
+        if (!comment.isAuthor(actor)) {
+            throw new UnauthorizedTicketOperationException();
+        }
+        comment.updateComment(context);
+    }
+
+    private Comment getCommentById(UUID commentId) {
+        return comments.stream()
+                .filter(comment -> comment.getId() == commentId)
+                .findFirst()
+                .orElseThrow(CommentNotFoundException::new);
+    }
+
+    public String getCommentContent(UUID commentId) {
+        Comment comment = getCommentById(commentId);
+        return comment.getContext();
     }
 }
