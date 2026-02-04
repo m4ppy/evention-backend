@@ -91,10 +91,61 @@ public class TicketTest {
         String context = "this should be end tomorrow.";
 
         // WHEN
-        ticket.createComment(contributor, context);
+        UUID commentId = ticket.createComment(contributor, context);
 
         // THEN
         assertEquals(1, ticket.commentCount());
     }
 
+
+    // ticket-cannot-allow-non-author-to-edit-comment
+    @Test
+    void ticket_cannot_allow_non_author_to_edit_comment() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member contributor1 = new Member(UUID.randomUUID());
+        Member contributor2 = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        project.addContributor(owner, contributor1);
+        project.addContributor(owner, contributor2);
+
+        Ticket ticket = new Ticket(project);
+
+        String context = "this should be end tomorrow.";
+
+        UUID commentId = ticket.createComment(contributor1, context);
+
+        String new_context = "this should be end today!";
+
+        // WHEN & THEN
+        assertThrows(UnauthorizedTicketOperationException.class,
+                () -> ticket.updateComment(contributor2, commentId, new_context));
+    }
+
+    @Test
+    void ticket_allow_author_to_edit_comment() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member contributor = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        project.addContributor(owner, contributor);
+
+        Ticket ticket = new Ticket(project);
+
+        String context = "this should be end tomorrow.";
+
+        UUID commentId = ticket.createComment(contributor, context);
+
+        String new_context = "this should be end today!";
+
+        // WHEN
+        ticket.updateComment(contributor, commentId, new_context);
+
+        // THEN
+        assertEquals(new_context, ticket.getCommentContent(commentId));
+    }
 }
