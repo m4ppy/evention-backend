@@ -4,6 +4,11 @@
 
 ---
 
+## Structure
+
+
+---
+
 ## What I learned
 
 - learning Domain-Driven-Development & Test-Driven-Development
