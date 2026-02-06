@@ -25,7 +25,7 @@ public class TicketTest {
 
         project.addContributor(owner, contributor);
 
-        Ticket ticket = Ticket.open(project);
+        Ticket ticket = Ticket.open(project, contributor);
 
         // WHEN & THEN
         assertThrows(
@@ -44,7 +44,7 @@ public class TicketTest {
 
         project.addMaintainer(owner, maintainer);
 
-        Ticket ticket = Ticket.open(project);
+        Ticket ticket = Ticket.open(project, maintainer);
 
         // WHEN
         ticket.changeStatus(TicketStatus.IN_PROGRESS, maintainer);
@@ -64,7 +64,7 @@ public class TicketTest {
 
         Project project = new Project(owner);
 
-        Ticket ticket = Ticket.open(project);
+        Ticket ticket = Ticket.open(project, owner);
 
         String context = "context for test.";
 
@@ -86,7 +86,7 @@ public class TicketTest {
 
         project.addContributor(owner, contributor);
 
-        Ticket ticket = new Ticket(project);
+        Ticket ticket = Ticket.open(project, contributor);
 
         String context = "this should be end tomorrow.";
 
@@ -111,7 +111,7 @@ public class TicketTest {
         project.addContributor(owner, contributor1);
         project.addContributor(owner, contributor2);
 
-        Ticket ticket = new Ticket(project);
+        Ticket ticket = Ticket.open(project, contributor1);
 
         String context = "this should be end tomorrow.";
 
@@ -134,7 +134,7 @@ public class TicketTest {
 
         project.addContributor(owner, contributor);
 
-        Ticket ticket = new Ticket(project);
+        Ticket ticket = Ticket.open(project, contributor);
 
         String context = "this should be end tomorrow.";
 
@@ -147,5 +147,38 @@ public class TicketTest {
 
         // THEN
         assertEquals(new_context, ticket.getCommentContent(commentId));
+    }
+
+
+    // ticket-cannot-be-created-by-non-project-member
+    @Test
+    void ticket_cannot_be_created_by_non_project_member() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member non_project_member = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        // WHEN & THEN
+        assertThrows(UnauthorizedTicketOperationException.class,
+                () -> Ticket.open(project, non_project_member));
+    }
+
+    @Test
+    void ticket_can_be_created_by_project_member() {
+        // GIVEN
+        Member owner = new Member(UUID.randomUUID());
+        Member contributor = new Member(UUID.randomUUID());
+
+        Project project = new Project(owner);
+
+        project.addContributor(owner, contributor);
+
+        // WHEN
+        Ticket ticket = Ticket.open(project, contributor);
+
+        // THEN
+        assertNotNull(ticket);
+
     }
 }

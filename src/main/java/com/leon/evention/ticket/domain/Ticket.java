@@ -21,7 +21,10 @@ public class Ticket {
         this.status = TicketStatus.OPEN;
     }
 
-    public static Ticket open(Project project) {
+    public static Ticket open(Project project, Member actor) {
+        if (!project.isProjectMember(actor)) {
+            throw new UnauthorizedTicketOperationException();
+        }
         return new Ticket(project);
     }
 
