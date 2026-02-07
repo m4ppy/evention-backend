@@ -13,6 +13,7 @@
 
 - learning Domain-Driven-Development & Test-Driven-Development
 - domain rule
+- internal data vs information
 
 ---
 
