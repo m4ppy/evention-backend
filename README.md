@@ -5,6 +5,19 @@
 ---
 
 ## Structure
+DDD(Domain-Driven-Development)
+
+```
+- ticket
+ - domain
+  -exception
+- project
+ - domain
+- member
+ - domain
+- comment
+ - domain
+```
 
 
 ---
@@ -14,6 +27,7 @@
 - learning Domain-Driven-Development & Test-Driven-Development
 - domain rule
 - internal data vs information
+- 
 
 ---
 
